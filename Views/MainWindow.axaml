@@ -1,0 +1,107 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:ThirteenthMod.ViewModels;assembly=ThirteenthMod"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="300"
+        Height="300" Width="600"
+        x:Class="ThirteenthMod.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="ThirteenthMod">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+  <Window.Styles>
+    <Style Selector="Button">
+      <Setter Property="FontSize" Value="24"></Setter>
+      <Setter Property="Margin" Value="2"></Setter>
+      <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+      <Setter Property="MinWidth" Value="40"></Setter>
+
+    </Style>
+  </Window.Styles>
+  <Window.Resources>
+    
+  </Window.Resources>
+  <Grid RowDefinitions="65,1*,Auto" ColumnDefinitions="1*,Auto">
+
+    <ItemsControl  Grid.Row="0" Grid.ColumnSpan="2" Items="{Binding AnsweredTasks}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Border Name="DataTriggerBorder" BorderBrush="Gray" BorderThickness="1" Margin="2">
+            <StackPanel>
+              <StackPanel.Styles>
+                <Style Selector="TextBlock">
+                  <Setter Property="FontSize" Value="14"/>
+                  <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                  <Setter Property="FontWeight" Value="Bold"></Setter>
+
+                </Style>
+              </StackPanel.Styles>
+              <TextBlock Text="{Binding BigNumber}"/>
+              <Grid  ColumnDefinitions="1*,Auto,1*,Auto">
+                <TextBlock Text="{Binding Answer}" Grid.Column="0" 
+                           IsVisible="{Binding !IsAnswerCorrect}" Foreground="Crimson" />
+                <TextBlock Text="{Binding Answer}" Grid.Column="0"
+                           IsVisible="{Binding IsAnswerCorrect}" Foreground="Green" />
+                <TextBlock Text="=" Grid.Column="1" IsVisible="{Binding IsAnswerCorrect}"></TextBlock>
+                <TextBlock Text="≠" Grid.Column="1" IsVisible="{Binding !IsAnswerCorrect}"></TextBlock>
+                <TextBlock Text="{Binding TrueAnswer}" Grid.Column="2" Foreground="Green" />
+                <TextBlock Text="Ok" Grid.Column="3" IsVisible="{Binding IsAnswerCorrect}" Foreground="Green" />
+                <TextBlock Text="X" Grid.Column="3" IsVisible="{Binding !IsAnswerCorrect}" Foreground="Crimson" />
+              </Grid>
+              <TextBlock Text="{Binding Time,StringFormat={}{0:F2} c}"/>
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <UniformGrid  Rows="1" Columns="10"></UniformGrid >
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+    </ItemsControl>
+    
+    <TextBlock Grid.Row="1"
+               Text="{Binding BigNumber, StringFormat={}{0} mod 13 \= ?}" Margin="10"
+               FontSize="30"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center" IsVisible="{Binding !IsFinish}"/>
+    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding IsFinish}">
+      <StackPanel.Styles>
+        <Style Selector="TextBlock">
+          <Setter Property="FontSize" Value="26"/>
+          <Setter Property="FontWeight" Value="Bold"></Setter>
+        </Style>
+      </StackPanel.Styles>
+      <TextBlock Text="{Binding NumberOfCorrectAnswers}"></TextBlock>
+      <TextBlock Text=" / 10"/>
+    </StackPanel>
+
+
+    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ElapsedTime, StringFormat={}{0:F2} c}"
+               HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="26" Margin="10"/>
+      
+ 
+    
+    <Button Grid.Row="2" Grid.ColumnSpan="2" IsVisible="{Binding IsFinish}" Command="{Binding RestartCommand}" Name="RestartButton">Заново</Button>
+    <ItemsControl  Items="{Binding ModResults}" Grid.Row="2" Grid.ColumnSpan="2"  IsVisible="{Binding !IsFinish}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <Button  Content="{Binding Value}" Command="{Binding ClickCommand}"></Button>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+          <UniformGrid  Rows="1"></UniformGrid >
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+    </ItemsControl >
+
+  </Grid>
+
+
+
+</Window>
